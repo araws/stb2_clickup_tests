@@ -24,8 +24,9 @@ class CreateSpaceTest {
                 .contentType(ContentType.JSON)
                 .body(space.toString())
                 .when()
-                .post(ClickUpUrl.getBaseUrl() + "/team/90151123937/space")
+                .post(ClickUpUrl.getSpacesUrl(ClickUpProperties.getTeamId()))
                 .then()
+                .log().ifError()
                 .extract()
                 .response();
 
