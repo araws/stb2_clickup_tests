@@ -10,14 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import requests.list.CreateListRequest;
 import requests.space.CreateSpaceRequests;
+import requests.task.CreateTaskRequest;
 
 class UpdateTaskE2ETest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateTaskE2ETest.class);
     private static String spaceName = "SPACE E2E";
     private static String listName = "TASKS";
+    private final String taskName = "Przetestować clickup";
     private String spaceId;
     private String listId;
+    private String taskId;
 
     @Test
     void updateTaskE3ETest() {
@@ -26,6 +29,9 @@ class UpdateTaskE2ETest {
 
         listId = createListStep();
         LOGGER.info("List created with id: {}", listId);
+
+        taskId = createTaskStep();
+        LOGGER.info("Task created with id: {}", taskId);
 
     }
 
@@ -51,6 +57,27 @@ class UpdateTaskE2ETest {
 
         JsonPath jsonData = response.jsonPath();
         Assertions.assertThat(jsonData.getString("name")).isEqualTo(listName);
+
+        return jsonData.getString("id");
+    }
+
+    private String createTaskStep() {
+        JSONObject task = new JSONObject();
+        task.put("name", taskName);
+        task.put("description", "Ciekawe jak to działa");
+        task.put("status", "to do");
+        task.put("priority", JSONObject.NULL);
+        task.put("parent", JSONObject.NULL);
+        task.put("time_estimate", JSONObject.NULL);
+        task.put("assignees", JSONObject.NULL);
+        task.put("archived", false);
+
+        final Response response = CreateTaskRequest.createTask(task, listId);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+
+        JsonPath jsonData = response.jsonPath();
+        Assertions.assertThat(jsonData.getString("name")).isEqualTo(taskName);
+        Assertions.assertThat(jsonData.getString("description")).isEqualTo("Ciekawe jak to działa");
 
         return jsonData.getString("id");
     }
