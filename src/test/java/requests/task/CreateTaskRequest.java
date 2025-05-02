@@ -1,5 +1,6 @@
 package requests.task;
 
+import dto.CreateTaskRequestDto;
 import io.restassured.response.Response;
 import org.json.JSONObject;
 import requests.BaseRequest;
@@ -14,6 +15,19 @@ public class CreateTaskRequest {
         return given()
                 .spec(BaseRequest.requestSpecWithLogs())
                 .body(task.toString())
+                .when()
+                .post(ClickUpUrl.getTasksUrl(listId))
+                .then()
+                .log().ifError()
+                .extract()
+                .response();
+    }
+
+    public static Response createTask(CreateTaskRequestDto taskDto, String listId) {
+
+        return given()
+                .spec(BaseRequest.requestSpecWithLogs())
+                .body(taskDto)
                 .when()
                 .post(ClickUpUrl.getTasksUrl(listId))
                 .then()

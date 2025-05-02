@@ -1,5 +1,6 @@
 package tests.e2e;
 
+import dto.CreateTaskRequestDto;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
@@ -62,17 +63,13 @@ class UpdateTaskE2ETest {
     }
 
     private String createTaskStep() {
-        JSONObject task = new JSONObject();
-        task.put("name", taskName);
-        task.put("description", "Ciekawe jak to działa");
-        task.put("status", "to do");
-        task.put("priority", JSONObject.NULL);
-        task.put("parent", JSONObject.NULL);
-        task.put("time_estimate", JSONObject.NULL);
-        task.put("assignees", JSONObject.NULL);
-        task.put("archived", false);
 
-        final Response response = CreateTaskRequest.createTask(task, listId);
+        CreateTaskRequestDto taskDto = new CreateTaskRequestDto();
+        taskDto.setName(taskName);
+        taskDto.setDescription("Ciekawe jak to działa");
+        taskDto.setStatus("to do");
+
+        final Response response = CreateTaskRequest.createTask(taskDto, listId);
         Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
 
         JsonPath jsonData = response.jsonPath();
