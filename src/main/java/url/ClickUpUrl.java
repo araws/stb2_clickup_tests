@@ -22,4 +22,8 @@ public class ClickUpUrl {
         return getTeamUrl(teamId) + SPACE;
     }
 
+    public static String getSpaceUrl(String spaceId) {
+        return SPACE + "/" + spaceId;
+    }
+
 }
