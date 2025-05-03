@@ -1,7 +1,9 @@
 package requests.task;
 
-import dto.CreateTaskRequestDto;
+import dto.request.CreateTaskRequestDto;
+import dto.response.CreateTaskResponseDto;
 import io.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.json.JSONObject;
 import requests.BaseRequest;
 import url.ClickUpUrl;
@@ -23,7 +25,7 @@ public class CreateTaskRequest {
                 .response();
     }
 
-    public static Response createTask(CreateTaskRequestDto taskDto, String listId) {
+    public static CreateTaskResponseDto createTask(CreateTaskRequestDto taskDto, String listId) {
 
         return given()
                 .spec(BaseRequest.requestSpecWithLogs())
@@ -31,8 +33,10 @@ public class CreateTaskRequest {
                 .when()
                 .post(ClickUpUrl.getTasksUrl(listId))
                 .then()
+                .statusCode(HttpStatus.SC_OK)
                 .log().ifError()
                 .extract()
-                .response();
+                .response()
+                .as(CreateTaskResponseDto.class);
     }
 }

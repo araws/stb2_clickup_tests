@@ -1,8 +1,6 @@
 package requests.space;
 
 import io.restassured.response.Response;
-import org.json.JSONObject;
-import properties.ClickUpProperties;
 import requests.BaseRequest;
 import url.ClickUpUrl;
 
