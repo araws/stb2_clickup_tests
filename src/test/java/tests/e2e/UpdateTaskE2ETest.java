@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import requests.list.CreateListRequest;
 import requests.space.CreateSpaceRequests;
 import requests.task.CreateTaskRequest;
+import requests.task.UpdateTaskRequest;
 
 class UpdateTaskE2ETest {
 
@@ -33,6 +34,8 @@ class UpdateTaskE2ETest {
 
         taskId = createTaskStep();
         LOGGER.info("Task created with id: {}", taskId);
+
+        updateTaskStep();
 
     }
 
@@ -75,5 +78,20 @@ class UpdateTaskE2ETest {
         Assertions.assertThat(response.getDescription()).isEqualTo("Ciekawe jak to działa");
 
         return response.getId();
+    }
+
+    private void updateTaskStep() {
+        JSONObject updateTask = new JSONObject();
+        updateTask.put("name", "Zmieniam nazwę zadania");
+        updateTask.put("description", "Zmieniam opis zdania");
+
+        Response response = UpdateTaskRequest.updateTask(updateTask, taskId);
+
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+
+        JsonPath jsonData = response.jsonPath();
+
+        Assertions.assertThat(jsonData.getString("name")).isEqualTo("Zmieniam nazwę zadania");
+        Assertions.assertThat(jsonData.getString("description")).isEqualTo("Zmieniam opis zdania");
     }
 }
