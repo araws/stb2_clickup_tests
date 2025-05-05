@@ -1,5 +1,6 @@
 package requests;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -17,6 +18,7 @@ public class BaseRequest {
         requestBuilder.setBaseUri(ClickUpUrl.getBaseUrl());
         requestBuilder.setContentType(ContentType.JSON);
         requestBuilder.addHeader("Authorization", ClickUpProperties.getToken());
+        requestBuilder.addFilter(new AllureRestAssured());
 
         return requestBuilder.build();
     }
@@ -28,6 +30,7 @@ public class BaseRequest {
         requestBuilder.addHeader("Authorization", ClickUpProperties.getToken());
         requestBuilder.addFilter(new RequestLoggingFilter());
         requestBuilder.addFilter(new ResponseLoggingFilter());
+        requestBuilder.addFilter(new AllureRestAssured());
 
         return requestBuilder.build();
     }
