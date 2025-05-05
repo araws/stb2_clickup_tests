@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import requests.list.CreateListRequest;
 import requests.space.CreateSpaceRequests;
+import requests.space.DeleteSpaceRequest;
 import requests.task.CreateTaskRequest;
 import requests.task.UpdateTaskRequest;
 
@@ -37,6 +38,7 @@ class UpdateTaskE2ETest {
 
         updateTaskStep();
         closeTaskStep();
+        deleteSpaceStep();
 
     }
 
@@ -105,5 +107,11 @@ class UpdateTaskE2ETest {
 
         JsonPath jsonData = response.jsonPath();
         Assertions.assertThat(jsonData.getString("status.status")).isEqualTo("complete");
+    }
+
+    private void deleteSpaceStep() {
+        Response response = DeleteSpaceRequest.deleteSpace(spaceId);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+
     }
 }
