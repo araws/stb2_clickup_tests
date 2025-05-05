@@ -36,6 +36,7 @@ class UpdateTaskE2ETest {
         LOGGER.info("Task created with id: {}", taskId);
 
         updateTaskStep();
+        closeTaskStep();
 
     }
 
@@ -93,5 +94,16 @@ class UpdateTaskE2ETest {
 
         Assertions.assertThat(jsonData.getString("name")).isEqualTo("Zmieniam nazwę zadania");
         Assertions.assertThat(jsonData.getString("description")).isEqualTo("Zmieniam opis zdania");
+    }
+
+    private void closeTaskStep() {
+        JSONObject closeTask = new JSONObject();
+        closeTask.put("status", "complete");
+
+        final Response response = UpdateTaskRequest.updateTask(closeTask, taskId);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+
+        JsonPath jsonData = response.jsonPath();
+        Assertions.assertThat(jsonData.getString("status.status")).isEqualTo("complete");
     }
 }
